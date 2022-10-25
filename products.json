@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Chicles Bazooka",
+    "price": 100,
+    "description": "Sabor tuttifruti",
+    "id": 1
+  },
+  {
+    "title": "Ford Dos Corazones",
+    "price": 150,
+    "description": "Chocolate",
+    "id": 2
+  },
+  {
+    "title": "Pepitos",
+    "price": 250,
+    "description": "Galletitas de chocolate",
+    "id": 3
+  }
+]
