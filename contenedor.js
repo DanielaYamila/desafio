@@ -1,5 +1,4 @@
-const fs = require('fs');
-const { userInfo } = require('os');
+import fs from 'fs';
 
 const pathToFile = "./products.json";
 
@@ -140,6 +139,4 @@ class Contenedor {
     };
 };
 
-
-
-module.exports = Contenedor;
+export default Contenedor;
