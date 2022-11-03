@@ -1,23 +1,11 @@
 import express from 'express';
-import Contenedor from "../contenedor.js";
+import router from './routes/productos.router.js';
+import __dirname from './utils.js';
 
 const app = express();
-const server = app.listen(8080, () => console.log('Hi'))
-const contenedor = new Contenedor();
 
-app.get('/', (rq, rs) => {
-    rs.send('Hola')
-})
+app.listen(8080, () => console.log('Listen...'))
 
-app.get('/productos', (rq, rs) => {
-    contenedor.readProducts().then((response) => {
-        rs.send(response);
-    })
-})
-
-app.get('/productos/:id', (rq, rs) => {
-    let id = rq.params.id;
-    contenedor.getById(id).then((response) => {
-        rs.send(response);
-    });
-})
+app.use(express.json())
+app.use(express.static(__dirname+'/public'))
+app.use('/api/productos', router)

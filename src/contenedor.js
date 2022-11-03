@@ -1,8 +1,9 @@
 import fs from 'fs';
+import __dirname from './utils.js';
 
-const pathToFile = "./products.json";
+const pathToFile = __dirname+'/files/products.json'
 
-class Contenedor {
+class Contenedor{
     createProduct = async (product) => {
         if (!product.title || !product.price || !product.description) {
             return {
@@ -62,6 +63,68 @@ class Contenedor {
             };
         }
     };
+    updateItem = async (object, id) => {
+        if (!id) {
+            return {
+                status: "Error",
+                message: "ID is required"
+            }
+        }
+        let products = await this.readProducts()
+        try {
+            let arrayProducts = products.products.map(product => {
+                if (product.id == id) {
+                    return {
+                        name: object.name ? object.name : product.name,
+                        description: object.description ? object.description : product.description,
+                        image: object.image ? object.image : product.image,
+                        price: object.price ? object.price : product.price,
+                        id: product.id
+                    }
+                } else {
+                    return product;
+                }
+            })
+            let productUpdate = arrayProducts.find(product => product.id == id)
+            if (productUpdate) {
+                await fs.promises.writeFile(pathToFile, JSON.stringify(arrayProducts, null, 2))
+                return {
+                    status: "success",
+                    message: "successfully upgraded product",
+                    productNew: productUpdate
+                }
+            } else {
+                return {
+                    status: "error",
+                    message: "Producto no encontrado"
+                }
+            }
+        } catch {
+            return products;
+        }
+    }
+    deleteObj = async () => {
+        try {
+            if (fs.existsSync(pathToFile)) {
+                let newProd = [];
+                await fs.promises.writeFile(pathToFile, JSON.stringify(newProd))
+                return {
+                    status: "success",
+                    Message: "Borrar todos los productos"
+                }
+            } else {
+                return {
+                    status: "Error",
+                    Message: "Archivo no encontrado"
+                }
+            }
+        } catch (error) {
+            return {
+                status: "Error",
+                message: error.message
+            };
+        };
+    };
     getById = async(id) => {
         if (!id) {
             return {
@@ -98,28 +161,36 @@ class Contenedor {
                 message: null,
             };
         }
-        if (fs.existsSync(pathToFile)) {
+        try {
             if (fs.existsSync(pathToFile)) {
                 let data = await fs.promises.readFile(pathToFile, "utf-8");
                 let products = JSON.parse(data);
-                let newProducts = products.filter((product) => product.id != id);
-                await fs.promises.writeFile(
-                    pathToFile,
-                    JSON.stringify(newProducts, null, 2)
-                );
-                return {
-                    status: "Exitoso",
-                    message: "El producto se ha eliminado",
+                if (productos.find(producto => producto.id == id)) {
+                    let newProducts = products.filter((product) => product.id != id);
+                    await fs.promises.writeFile(pathToFile, JSON.stringify(newProducts, null, 2));
+                    return {
+                        status: "Exitoso",
+                         message: "El producto se ha eliminado",
+                    };
+                } else {
+                    return {
+                        status: "Error",
+                        message: "Producto no encontrado"
+                    };
                 };
             } else {
                 return {
                     status: "Error",
-                    message: "Producto no encontrado"
-                };
-            };
-            
+                    Message: "Ruta no encontrada"
+                }
+            }
+        } catch (error) {
+            return {
+                status: "Error",
+                message: error.message
+            }
         }
-    }
+    } 
     deleteAll = async () => {
         try {
             if (fs.existsSync(pathToFile)) {
