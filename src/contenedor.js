@@ -3,71 +3,35 @@ import __dirname from './utils.js';
 
 const pathToFile = __dirname+'/files/products.json'
 
-class Contenedor{
+export default class Contenedor {
     createProduct = async (product) => {
-        if (!product.title || !product.price || !product.description) {
-            return {
-                status: "Error",
-                message: "Faltan campos obligatorios"
-            };
-        }
-        try {
-            if (fs.existsSync(pathToFile)) {
-                let data = await fs.promises.readFile(pathToFile, "utf-8");
-                let products = JSON.parse(data);
-                let id = products.length + 1;
-                product.id = id;
-                products.push(product);
-                await fs.promises.writeFile(pathToFile, JSON.stringify(products, null, 2))
-                return {
-                    status: "Exitoso",
-                    message: "Se ha creado el producto"
-                };
-            } else {
+        if(fs.existsSync(pathToFile)){
+            let data = await fs.promises.readFile(pathToFile,'utf-8');
+            let products = JSON.parse(data);
+            let id = products.length + 1;
+            product.id = id;
+            if (products.length===0){
                 product.id = 1;
-                await fs.promises.writeFile(
-                    pathToFile,
-                    JSON.stringify([product], null, 2)
-                );
-                return {
-                    status: "Exitoso",
-                    message: "Se ha creado el creado"
-                };
+                products.push(product);
+                await fs.promises.writeFile(pathToFile,JSON.stringify(products,null,2));
+                return {status:"success",message:"Agrego un producto."}
             }
-        } catch (error) {
+            products.push(product);
+            await fs.promises.writeFile(pathToFile,JSON.stringify(products,null,2));
             return {
-                status: "Error",
-                message: error.message
+                status:"success",
+                message:"Agrego un producto."
             }
-        };
-    }
-    readProducts = async () => {
-        try {
-            if (fs.existsSync(pathToFile)) {
-                let data = await fs.promises.readFile(pathToFile, "utf-8");
-                let products = JSON.parse(data);
-                return {
-                    status: "Exitoso",
-                    products: products,
-                };
-            } else {
-                return {
-                    status: "Error",
-                    message: "No ha encontrado los productos."
-                };
-            }
-        } catch (error){
-            return {
-                status: "Error",
-                message: error.message,
-            };
+        } else{
+            await fs.promises.writeFile(pathToFile,JSON.stringify([product],null,2));
+            return {status:"success",message: "Agrego un producto."}
         }
-    };
+    }
     updateItem = async (object, id) => {
         if (!id) {
             return {
                 status: "Error",
-                message: "ID is required"
+                message: "Ese ID no existe"
             }
         }
         let products = await this.readProducts()
@@ -75,10 +39,10 @@ class Contenedor{
             let arrayProducts = products.products.map(product => {
                 if (product.id == id) {
                     return {
-                        name: object.name ? object.name : product.name,
+                        title: object.title ? object.title : product.title,
                         description: object.description ? object.description : product.description,
+                        number: object.number ? object.number : product.number,
                         image: object.image ? object.image : product.image,
-                        price: object.price ? object.price : product.price,
                         id: product.id
                     }
                 } else {
@@ -103,111 +67,77 @@ class Contenedor{
             return products;
         }
     }
-    deleteObj = async () => {
-        try {
-            if (fs.existsSync(pathToFile)) {
-                let newProd = [];
-                await fs.promises.writeFile(pathToFile, JSON.stringify(newProd))
+    readProducts = async () => {
+        if (fs.existsSync(pathToFile)) {
+            try {
+                let data = await fs.promises.readFile(pathToFile, "utf-8");
+                let products = JSON.parse(data);
                 return {
-                    status: "success",
-                    Message: "Borrar todos los productos"
-                }
-            } else {
+                    status: "Exitoso",
+                    payload: products
+                };
+            }catch (error){
                 return {
                     status: "Error",
-                    Message: "Archivo no encontrado"
-                }
+                    error:error
+                };
             }
-        } catch (error) {
+        } else {
             return {
-                status: "Error",
-                message: error.message
-            };
-        };
+                status: "Exitoso",
+                payload: []
+            }
+        }
     };
     getById = async(id) => {
         if (!id) {
             return {
                 status: "Error",
-                message: null,
-            };
+                message: "Ese ID no existe"
+            }
         }
         if(fs.existsSync(pathToFile)) {
-            let data = await fs.promises.readFile(pathToFile, "utf-8");
-            let products = JSON.parse(data);
-            let product = products.find((product) => product.id == id);
-            if(product) {
-                return {
-                    status: "Exitoso",
-                    product: product,
-                };
-            } else {
-                return {
-                    status: "Error",
-                    message: "Producto no existente",
-                };
-            }
-        } else {
-            return {
-                status: "Error",
-                message: "Producto no existente"
-            }
-        };
-    };
-    deleteById = async(id) => {
-        if (!id) {
-            return {
-                status: "Error",
-                message: null,
-            };
-        }
-        try {
-            if (fs.existsSync(pathToFile)) {
+            try {
                 let data = await fs.promises.readFile(pathToFile, "utf-8");
                 let products = JSON.parse(data);
-                if (productos.find(producto => producto.id == id)) {
+                let product = products.find((product) => product.id == id);
+                return {
+                    status: "Exitoso",
+                    payload: product,
+                };
+            } catch (error){
+                return {
+                    status: "Error",
+                    error:error
+                };
+            }
+        }
+    };
+    deleteById = async(id) => {
+        if (fs.existsSync(pathToFile)) {
+            try {
+                let data = await fs.promises.readFile(pathToFile, "utf-8");
+                let products = JSON.parse(data);
+                if (products.find(producto => producto.id == id)) {
                     let newProducts = products.filter((product) => product.id != id);
                     await fs.promises.writeFile(pathToFile, JSON.stringify(newProducts, null, 2));
                     return {
                         status: "Exitoso",
-                         message: "El producto se ha eliminado",
+                        message: "Producto eliminado."
                     };
                 } else {
                     return {
                         status: "Error",
-                        message: "Producto no encontrado"
+                        message: "Producto no encontrado."
                     };
                 };
-            } else {
+            } catch (error) {
                 return {
                     status: "Error",
-                    Message: "Ruta no encontrada"
+                    error: error.message
                 }
-            }
-        } catch (error) {
-            return {
-                status: "Error",
-                message: error.message
-            }
+            } 
         }
-    } 
-    deleteAll = async () => {
-        try {
-            if (fs.existsSync(pathToFile)) {
-                fs.unlinkSync(pathToFile)
-            } else {
-                return {
-                    status: "Error",
-                    message: "No ha encontrado los productos."
-                };
-            }
-        } catch (error){
-            return {
-                status: "Error",
-                message: error.message,
-            };
-        }
-    };
+    }
+    
 };
-
-export default Contenedor;

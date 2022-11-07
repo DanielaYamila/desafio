@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "title": "Merengadas",
+    "description": "Relleno dulce",
+    "number": "120",
+    "image": "http://localhost:8080/images/1667859083243-merengadas.jpg",
+    "id": 1
+  },
+  {
+    "title": "Pitusas",
+    "description": "Galletitas de chocolate con relleno con crema",
+    "number": "100",
+    "image": "http://localhost:8080/images/1667860182411-205285-800-auto.webp",
+    "id": 2
+  }
+]
