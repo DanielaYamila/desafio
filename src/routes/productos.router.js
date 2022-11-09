@@ -5,9 +5,19 @@ import uploader from '../service/upload.js'
 const contenedor = new Contenedor();
 const router = Router();
 
-router.get('/', async (request, response) => {
-    let result = await contenedor.readProducts()
-    response.send(result);
+router.get('/productos', async (request, response) => {
+    let products = await contenedor.readProducts()
+    if (products.products !=0) {
+        response.render('home.handlebars', {
+            products
+        })
+    } else {
+        response.render('home.handlebars', {
+            products: {
+                mensaje: "No hay productos agregados"
+            }
+        })
+    }
 })
 
 router.post('/', uploader.single('image'), async (request, response) => {
@@ -19,23 +29,23 @@ router.post('/', uploader.single('image'), async (request, response) => {
     response.send({status:"success",message:"Producto añadido."});
 })
 
-router.get('/:id', async (request, response) => {
-    const id = request.params.id
-    let result = await contenedor.getById(id)
-    response.send(result)
-})
+// router.get('/:id', async (request, response) => {
+//     const id = request.params.id
+//     let result = await contenedor.getById(id)
+//     response.send(result)
+// })
 
-router.put('/:id', async (request, response) => {
-    const id = request.params.id
-    const productBody = request.body
-    let result = await contenedor.updateItem(productBody, id)
-    response.send(result)
-})
+// router.put('/:id', async (request, response) => {
+//     const id = request.params.id
+//     const productBody = request.body
+//     let result = await contenedor.updateItem(productBody, id)
+//     response.send(result)
+// })
 
-router.delete('/:id', async (request, response) => {
-    const id = request.params.id
-    let result = await contenedor.deleteById(id)
-    response.send(result)
-})
+// router.delete('/:id', async (request, response) => {
+//     const id = request.params.id
+//     let result = await contenedor.deleteById(id)
+//     response.send(result)
+// })
 
 export default router;
