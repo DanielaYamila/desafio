@@ -8,20 +8,36 @@
 </head>
 <body>
     <main>
-        <h1>Formulario</h1>
-        <form id="productsForm">
-            <label>Golosina favorita:</label>
-            <input name="title">
-            <label>Detalles:</label>
-            <input name="description">
-            <label>Imagen del producto:</label>
-            <input type="file" name="image">
-            <label>Precio:</label>
-            <input name="number">
-            <input type="submit">
-        </form>
-        <a href="http://localhost:8080/productos"><button>Ver productos</button></a>
+        <div>
+            <h2>Formulario</h2>
+            <form id="productsForm">
+                <label>Golosina favorita:</label>
+                <input name="title" id="title1">
+                <label>Imagen del producto:</label>
+                <input type="file" name="image" id="image1">
+                <label>Precio:</label>
+                <input name="number" id="price1">
+                <input type="submit">
+            </form>
+            <a href="http://localhost:8080/productos"><button>Ver productos</button></a>
+            <div>
+                <h2>Productos</h2>
+                <table>
+                    <thead>
+                        <th>Producto:</th>
+                        <th>Precio:</th>
+                    </thead>
+                    <tbody id="products"></tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <h2>Chat</h2>
+            <a href="http://localhost:8080/chat"><button>Ver chat</button></a>
+        </div>
+        <script src="/socket.io/socket.io.js"></script>
         <script src="./index.js"></script>
+        <script src="./js/products.js"></script>
     </main>
 </body>
 </html>
