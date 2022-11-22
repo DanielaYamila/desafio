@@ -2,10 +2,9 @@
     <h2>Lista de productos</h2>
     <div{{#each products.product}}>
         <p>{{this.title}}</p>
-        <p>{{this.description}}</p>
-        <p>{{this.image}}</p>
+        <p>{{this.price}}</p>
+        <img src={{this.image}}>
         <br>
-        <p>{{products.mensaje}}</p>
     </div {{/each}}>
     <a href="http://localhost:8080/"><button>Agregar Productos</button></a>
 </div>

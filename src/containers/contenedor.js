@@ -1,5 +1,5 @@
 import fs from 'fs';
-import __dirname from './utils.js';
+import __dirname from '../utils.js';
 
 const pathToFile = __dirname+'/files/products.json'
 
@@ -39,8 +39,7 @@ export default class Contenedor {
             let arrayProducts = products.products.map(product => {
                 if (product.id == id) {
                     return {
-                        title: object.title ? object.title : product.title,
-                        description: object.description ? object.description : product.description,
+                        name: object.name ? object.name : product.name,
                         number: object.number ? object.number : product.number,
                         image: object.image ? object.image : product.image,
                         id: product.id
@@ -74,18 +73,18 @@ export default class Contenedor {
                 let products = JSON.parse(data);
                 return {
                     status: "Exitoso",
-                    payload: products
+                    products: products
                 };
-            }catch (error){
+            } catch (error){
                 return {
                     status: "Error",
-                    error:error
+                    message: "Route not found"
                 };
             }
         } else {
             return {
                 status: "Exitoso",
-                payload: []
+                message: error.message
             }
         }
     };

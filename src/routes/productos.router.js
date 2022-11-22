@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Contenedor from '../contenedor.js';
+import Contenedor from '../containers/contenedor.js';
 import uploader from '../service/upload.js'
 
 const contenedor = new Contenedor();
@@ -10,12 +10,6 @@ router.get('/productos', async (request, response) => {
     if (products.products !=0) {
         response.render('products', {
             products
-        })
-    } else {
-        response.render('products', {
-            products: {
-                mensaje: "No hay productos agregados"
-            }
         })
     }
 })

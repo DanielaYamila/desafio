@@ -1,7 +1,8 @@
 import express from 'express';
 import {Server} from 'socket.io';
 import handlebars from 'express-handlebars';
-import Contenedor from './contenedor.js';
+import Contenedor from './containers/contenedor.js';
+import contenedorMsg from './containers/contenedormsg.js';
 import router from './routes/productos.router.js';
 import __dirname from './utils.js';
 
@@ -9,14 +10,23 @@ const app = express();
 const server = app.listen(8080, () => console.log('Listen...'));
 const io = new Server(server); 
 const contenedor = new Contenedor();
+const containerMsg = new contenedorMsg();
+const products = [];
 const messages = [];
 const read = async () => {
-    let pdts = await Contenedor.readProducts();
-    pdts.products.forEach(pdt => {
+    let data = await contenedor.readProducts();
+    data.products.forEach(pdt => {
         products.push(pdt);
     });
 }
+const readMsg = async () => {
+    let data = await containerMsg.getAllMsg();
+    data.messages.forEach(msg => {
+        messages.push(msg);
+    });
+}
 read();
+readMsg();
 
 app.engine('handlebars', handlebars.engine());
 
@@ -37,12 +47,14 @@ io.on('conection', socket => {
     })
     socket.emit('logs', messages);
     socket.on('message', data => {
-        if (data.mailEmail != undefined) {
-        messages.push(data);
-        io.emit('logs', messages);
+        if (data.mailUser != undefined) {
+            messages.push(data);
+            containerMsg.saveMsg(data);
+            io.emit('logs', messages);
         }
     })
     socket.on('authenticated', data => {
-        console.log(`${data.email} se valido.`)
+        console.log(`${data.email} se valido.`);
+        socket.broadcas.emit('newUser', data.email);
     })
 })
