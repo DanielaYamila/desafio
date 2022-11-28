@@ -1,11 +1,10 @@
 <div>
     <h2>Registre su E-mail:</h2>
     <input id="userMail" type="email" placeholder="juancito_perez@gmail.com">
-    <h3>Mensajes: <a id="saludo"></a></h3>
+    <h3>Mensajes: </h3><a id="saludo"></a> <br>
     <input id="chat" placeholder="Escribe un mensaje..." disabled> <button id="sendMessage">Enviar</button>
-    <p id="chatPanel"></p>
+    <div id="chatPanel"></div>
     <a href="http://localhost:8080/"><button>VOLVER</button></a>
 </div>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/chat.js"></script>

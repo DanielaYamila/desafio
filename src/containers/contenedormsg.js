@@ -3,12 +3,12 @@ import __dirname from '../utils.js';
 
 const pathToFile = __dirname+'/files/messages.json';
 
-class ContenedorMsg {
+export default class contenedorMsg {
     saveMsg = async (msg) => {
         if (!msg) {
             return {
                 status: "Error",
-                message: "Messga is required"
+                message: "Messaga is required"
             }
         }
         try {
@@ -55,5 +55,3 @@ class ContenedorMsg {
         }
     }
 }
-
-export default ContenedorMsg;

@@ -8,9 +8,22 @@ import __dirname from './utils.js';
 
 const app = express();
 const server = app.listen(8080, () => console.log('Listen...'));
-const io = new Server(server); 
 const contenedor = new Contenedor();
 const containerMsg = new contenedorMsg();
+
+app.engine('handlebars', handlebars.engine());
+
+app.set('views', __dirname+'/views');
+app.set('view engine', 'handlebars');
+
+app.use(express.json());
+app.use(express.static(__dirname+'/public'));
+app.use('/', router);
+app.use('/productos', router);
+app.use('/chat', router);
+
+const io = new Server(server); 
+
 const products = [];
 const messages = [];
 const read = async () => {
@@ -28,17 +41,6 @@ const readMsg = async () => {
 read();
 readMsg();
 
-app.engine('handlebars', handlebars.engine());
-
-app.set('views', __dirname+'/views');
-app.set('view engine', 'handlebars');
-
-app.use(express.json());
-app.use(express.static(__dirname+'/public'));
-app.use('/', router);
-app.use('/productos', router);
-app.use('/chat', router);
-
 io.on('conection', socket => {
     socket.emit('savedProducts', products);
     socket.on('add', data => {
@@ -47,7 +49,7 @@ io.on('conection', socket => {
     })
     socket.emit('logs', messages);
     socket.on('message', data => {
-        if (data.mailUser != undefined) {
+        if (data.emailUser != undefined) {
             messages.push(data);
             containerMsg.saveMsg(data);
             io.emit('logs', messages);
@@ -55,6 +57,5 @@ io.on('conection', socket => {
     })
     socket.on('authenticated', data => {
         console.log(`${data.email} se valido.`);
-        socket.broadcas.emit('newUser', data.email);
     })
 })

@@ -1,9 +1,20 @@
 [
   {
-    "title": "Pitusas",
-    "description": "Galletitas de chocolate con relleno con crema",
-    "number": "100",
-    "image": "http://localhost:8080/images/1668029257042-205285-800-auto.webp",
+    "name": "Pepitos",
+    "price": "100",
+    "image": "",
     "id": 1
+  },
+  {
+    "name": "Pitusas",
+    "price": "120",
+    "image": "",
+    "id": 2
+  },
+  {
+    "name": "merengadas",
+    "price": "220",
+    "image": "",
+    "id": 3
   }
 ]

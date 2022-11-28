@@ -1,12 +1,10 @@
 const socket = io();
-const productsRealTime = document.getElementById('productsRealTime');
+const productsDiv = document.getElementById('products');
+const products = '';
 
 socket.on('savedProducts', data => {
-    const productsDiv = document.getElementById('products');
-    let products = '';
     data.forEach(pdt => {
-        products += `<td>${pdt.title}</td>
-                    <td>$${pdt.price}</td>`
+        products += `<tr><td>${pdt.name}</td><td>$${pdt.price}</td></tr>`
+        productsDiv.innerHTML = products;
     });
-    productsDiv.innerHTML = products;
 })

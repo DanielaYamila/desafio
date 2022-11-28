@@ -5,26 +5,39 @@ const pathToFile = __dirname+'/files/products.json'
 
 export default class Contenedor {
     createProduct = async (product) => {
-        if(fs.existsSync(pathToFile)){
-            let data = await fs.promises.readFile(pathToFile,'utf-8');
-            let products = JSON.parse(data);
-            let id = products.length + 1;
-            product.id = id;
-            if (products.length===0){
-                product.id = 1;
-                products.push(product);
-                await fs.promises.writeFile(pathToFile,JSON.stringify(products,null,2));
-                return {status:"success",message:"Agrego un producto."}
-            }
-            products.push(product);
-            await fs.promises.writeFile(pathToFile,JSON.stringify(products,null,2));
+        if (!product.name || !product.price) {
             return {
-                status:"success",
-                message:"Agrego un producto."
+                status: "Error",
+                message: "Missing required fields"
             }
-        } else{
-            await fs.promises.writeFile(pathToFile,JSON.stringify([product],null,2));
-            return {status:"success",message: "Agrego un producto."}
+        }
+        try {
+            if (fs.existsSync(pathToFile)) {
+                let data = await fs.promises.readFile(pathToFile, "utf-8");
+                let products = JSON.parse(data);
+                let id = products.length + 1;
+                product.id = id;
+                products.push(product)
+                await fs.promises.writeFile(pathToFile, JSON.stringify(products, null, 2))
+                return {
+                    status: "success",
+                    message: "Product added successfully",
+                    id: `Se le asigno el id ${id}`
+                }
+            } else {
+                product.id = 1;
+                await fs.promises.writeFile(pathToFile, JSON.stringify([product], null, 2));
+                return {
+                    status: "success",
+                    message: "Product created successfully",
+                    id: `Se le asigno el id 1`
+                }
+            }
+        } catch (error) {
+            return {
+                status: "Error",
+                message: error.message
+            }
         }
     }
     updateItem = async (object, id) => {
@@ -40,7 +53,7 @@ export default class Contenedor {
                 if (product.id == id) {
                     return {
                         name: object.name ? object.name : product.name,
-                        number: object.number ? object.number : product.number,
+                        price: object.price ? object.price : product.price,
                         image: object.image ? object.image : product.image,
                         id: product.id
                     }

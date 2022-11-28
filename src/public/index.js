@@ -1,6 +1,7 @@
 const form = document.getElementById('productsForm');
 let nameInput = document.getElementById('name1');
 let priceInput = document.getElementById('price1');
+let imageInput = document.getElementById('image1');
 
 form.addEventListener('submit', e=>{
     e.preventDefault();
@@ -13,5 +14,6 @@ form.addEventListener('submit', e=>{
         }).then(result => result.json).then(json => console.log(json))
         nameInput.value = '';
         priceInput.value = '';
+        imageInput.value = '';
     }
 })
