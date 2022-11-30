@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Bag Miu Miu",
+    "description": "one handle bag, zip closure, adjustable and detachable strap, frontal logo littering",
+    "code": "0834",
+    "price": "20000",
+    "stock": "2",
+    "thumbnail": "",
+    "id": 1,
+    "timestamp": "30/10/2022 - 0:48:5"
+  },
+  {
+    "title": "Shearling mini-bag Prada",
+    "description": "The softness and fuzziness of shearling accentuate the modern, wintry allure of this mini-bag characterized by its harmonious, delicate shape Enhanced with a triangle patchwork motif that elevates the design, the accessory is decorated with the enameled metal triangle logo",
+    "code": "0784",
+    "price": "45000",
+    "stock": "1",
+    "thumbnail": "",
+    "id": 2,
+    "timestamp": "30/10/2022 - 0:54:2"
+  }
+]
